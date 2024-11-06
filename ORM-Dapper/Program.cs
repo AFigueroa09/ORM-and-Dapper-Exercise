@@ -30,6 +30,57 @@ namespace ORM_Dapper
                 Console.WriteLine();
                 Console.WriteLine();
             }
+
+            ProductRepository productRepo = new ProductRepository(conn);
+
+            Product product = new Product();
+            product.Name = "Dell Inspiron";
+            product.OnSale = 0;
+            product.Price = 2000;
+            product.CategoryID = 1;
+            product.StockLevel = 100;
+
+            productRepo.InsertProduct(product);
+
+            var products = productRepo.GetAllProducts();
+
+            Product lastProduct = new Product();
+            foreach (var currentProduct in products)
+            {
+                Console.WriteLine(currentProduct.ProductID);
+                Console.WriteLine(currentProduct.Name);
+                Console.WriteLine();
+                Console.WriteLine();
+
+                lastProduct = currentProduct;
+            }
+
+            Product dellInspiron = productRepo.GetProduct(lastProduct.ProductID);
+            dellInspiron.StockLevel = dellInspiron.StockLevel--;
+
+            productRepo.UpdateProduct(dellInspiron);
+
+            products = productRepo.GetAllProducts();
+
+            foreach (var currentProduct in products)
+            {
+                Console.WriteLine(currentProduct.ProductID);
+                Console.WriteLine(currentProduct.Name);
+                Console.WriteLine();
+                Console.WriteLine();
+            }
+
+            productRepo.DeleteProduct(dellInspiron);
+
+            products = productRepo.GetAllProducts();
+
+            foreach (var currentProduct in products)
+            {
+                Console.WriteLine(currentProduct.ProductID);
+                Console.WriteLine(currentProduct.Name);
+                Console.WriteLine();
+                Console.WriteLine();
+            }
         }
     }
 }
